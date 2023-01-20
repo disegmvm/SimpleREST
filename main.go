@@ -21,9 +21,9 @@ func main() {
 
 	router := gin.Default()
 	router.GET("/cars", getCars)
-	router.GET("/car/:id", getCarByID)
-	router.POST("/car", createCar)
-	router.DELETE("/car/:id", deleteCar)
+	router.GET("/cars/:id", getCarByID)
+	router.POST("/cars", createCar)
+	router.DELETE("/cars/:id", deleteCar)
 
 	router.Run("localhost:8080")
 }
