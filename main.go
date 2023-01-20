@@ -24,7 +24,6 @@ func main() {
 	router.GET("/car/:id", getCarByID)
 	router.POST("/car", createCar)
 	router.DELETE("/car/:id", deleteCar)
-	router.PUT("/car/:id", replaceCar)
 
 	router.Run("localhost:8080")
 }
@@ -59,23 +58,6 @@ func deleteCar(c *gin.Context) {
 		if car.ID == c.Param("id") {
 			Cars = append(Cars[:index], Cars[index+1:]...)
 			c.IndentedJSON(http.StatusOK, gin.H{"message": "Car is deleted"})
-			return
-		}
-	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Car is not found"})
-}
-
-func replaceCar(c *gin.Context) {
-	var newCar Car
-	if err := c.BindJSON(&newCar); err != nil {
-		return
-	}
-
-	for index, car := range Cars {
-		if car.ID == c.Param("id") {
-			Cars = append(Cars[:index], Cars[index+1:]...)
-			Cars = append(Cars, newCar)
-			c.IndentedJSON(http.StatusOK, gin.H{"message": "Car is replaced"})
 			return
 		}
 	}
