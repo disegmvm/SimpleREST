@@ -23,6 +23,7 @@ func main() {
 	router.GET("/car/:id", getCarByID)
 	router.POST("/car", createCar)
 	router.DELETE("/car/:id", deleteCar)
+	router.PUT("/car/:id", replaceCar)
 
 	router.Run("localhost:8080")
 }
@@ -60,16 +61,21 @@ func deleteCar(c *gin.Context) {
 		}
 	}
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": " Car is not found"})
+}
 
-	/*for index, car := range cars {
-		if car.ID == pathParameters["id"] {
-			// updates our Articles array to remove the
-			// article
+func replaceCar(c *gin.Context) {
+	var newCar car
+	if err := c.BindJSON(&newCar); err != nil {
+		return
+	}
+
+	for index, car := range cars {
+		if car.ID == c.Param("id") {
 			cars = append(cars[:index], cars[index+1:]...)
-
-			responseWriter.WriteHeader(http.StatusOK)
-
+			cars = append(cars, newCar)
+			c.IndentedJSON(http.StatusOK, gin.H{"message": " Car is replaced"})
+			return
 		}
-	}*/
-
+	}
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": " Car is not found"})
 }
